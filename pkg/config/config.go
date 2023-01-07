@@ -2,9 +2,8 @@ package config
 
 type Config struct {
 	Version string `yaml:"version"`
-	URL     string `yaml:"url"`
-	Token   string `yaml:"token"`
 	Nodes   []Node `yaml:"nodes"`
+	Secret  Secret `yaml:"secret"`
 }
 
 type Node struct {
@@ -12,6 +11,12 @@ type Node struct {
 	Type    NodeType `yaml:"type"`
 	Labels  []string `yaml:"labels"`
 	Taints  []string `yaml:"taints"`
+}
+
+type Secret struct {
+	URL       string `yaml:"url"`
+	DataStore string `yaml:"datastore"`
+	Token     string `yaml:"token"`
 }
 
 type NodeType string
