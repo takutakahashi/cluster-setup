@@ -5,4 +5,13 @@ nodes:
   - 10.10.1.2
   type: server
   taints:
-  - node-role/storage=true:NoSchedule
+  - k3s-controlplane=true:NoExecute
+  params:
+    no-deploy:
+      - traefik
+      - servicelb
+      - metrics-server
+    disable:
+      - local-storage
+    tls-san:
+      - k8s-api.com

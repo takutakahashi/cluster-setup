@@ -7,10 +7,11 @@ type Config struct {
 }
 
 type Node struct {
-	Targets []string `yaml:"targets"`
-	Type    NodeType `yaml:"type"`
-	Labels  []string `yaml:"labels"`
-	Taints  []string `yaml:"taints"`
+	Targets []string               `yaml:"targets"`
+	Type    NodeType               `yaml:"type"`
+	Labels  []string               `yaml:"labels"`
+	Taints  []string               `yaml:"taints"`
+	Params  map[string]interface{} `yaml:"params"`
 }
 
 type Secret struct {
