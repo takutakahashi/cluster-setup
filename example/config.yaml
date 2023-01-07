@@ -1,6 +1,7 @@
 version: v1.23.12+k3s1
 nodes:
-- targets:
+- name: server
+  targets:
   - 10.10.1.1
   - 10.10.1.2
   type: server

@@ -1,5 +1,11 @@
 package config
 
+import (
+	"io/ioutil"
+
+	"gopkg.in/yaml.v3"
+)
+
 type Config struct {
 	Version string `yaml:"version"`
 	Nodes   []Node `yaml:"nodes"`
@@ -7,6 +13,7 @@ type Config struct {
 }
 
 type Node struct {
+	Name    string                 `yaml:"name"`
 	Targets []string               `yaml:"targets"`
 	Type    NodeType               `yaml:"type"`
 	Labels  []string               `yaml:"labels"`
@@ -26,3 +33,15 @@ var (
 	NodeTypeServer NodeType = "server"
 	NodeTypeAgent  NodeType = "agent"
 )
+
+func Load(path string) (*Config, error) {
+	c := &Config{}
+	buf, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	if err := yaml.Unmarshal(buf, c); err != nil {
+		return nil, err
+	}
+	return c, nil
+}
