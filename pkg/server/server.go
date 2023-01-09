@@ -14,9 +14,10 @@ import (
 )
 
 type Server struct {
-	Node  config.Node
-	Host  string
-	Admin bool
+	Node   config.Node
+	Host   string
+	Admin  bool
+	Secret config.Secret
 }
 
 func (s Server) Transport() error {
@@ -42,9 +43,11 @@ func (s Server) ExecuteMitamae() error {
 	if err := s.setupMitamae(); err != nil {
 		return err
 	}
-	if out, err := s.Execute([]string{"mitamae", "local", "cluster-setup/default.rb"}, true); err != nil {
+	if out, err := s.Execute([]string{"mitamae", "local", "cluster-setup/default.rb", "--dry-run"}, true); err != nil {
 		logrus.Errorf("%s", out)
 		return err
+	} else {
+		logrus.Errorf("%s", out)
 	}
 	return nil
 }
@@ -65,7 +68,7 @@ func (s Server) ParseConfig() error {
 	if err != nil {
 		return err
 	}
-	if err := tpl.Execute(w, s.Node); err != nil {
+	if err := tpl.Execute(w, s); err != nil {
 		return err
 	}
 	if err := exec.Command("cp", "-rf", "assets", "dist").Run(); err != nil {

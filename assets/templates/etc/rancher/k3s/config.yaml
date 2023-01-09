@@ -1,13 +1,22 @@
-{{- if .Taints -}}
+{{- if eq .Node.Type "server" -}}
+datastore-endpoint: {{ .Secret.DataStore }}
+{{- end }}
+{{- if eq .Node.Type "agent" -}}
+server: {{ .Secret.URL }}
+{{- end }}
+token: {{ .Secret.Token }}
+node-name: {{ .Node.Type }}
+with-node-id: true
+{{ if .Node.Taints -}}
 node-taint:
-{{- range .Taints }}
+{{- range .Node.Taints }}
     - {{ . }}
 {{- end }}
 {{- end }}
-{{- if .Labels -}}
+{{- if .Node.Labels -}}
 node-label:
-{{- range .Labels }}
+{{- range .Node.Labels }}
     - {{ . }}
 {{- end }}
 {{- end }}
-{{ .Params | toYaml }}
+{{ .Node.Params | toYaml }}
