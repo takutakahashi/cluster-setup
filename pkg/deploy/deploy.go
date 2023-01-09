@@ -7,13 +7,18 @@ import (
 
 func Execute(cfg *config.Config) error {
 	for _, node := range cfg.Nodes {
-
-		server.ParseConfig(node)
 		for _, t := range node.Targets {
-			if err := server.Transport(t); err != nil {
+
+			s := server.Server{
+				Host: t,
+			}
+			//if err := s.ParseConfig(); err != nil {
+			//	return err
+			//}
+			if err := s.Transport(); err != nil {
 				return err
 			}
-			if err := server.ExecuteMitamae(t); err != nil {
+			if err := s.ExecuteMitamae(); err != nil {
 				return err
 			}
 		}

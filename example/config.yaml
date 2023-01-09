@@ -2,8 +2,7 @@ version: v1.23.12+k3s1
 nodes:
 - name: server
   targets:
-  - 10.10.1.1
-  - 10.10.1.2
+  - ubuntu@10.10.1.91
   type: server
   taints:
   - k3s-controlplane=true:NoExecute
