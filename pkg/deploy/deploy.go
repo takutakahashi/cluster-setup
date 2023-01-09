@@ -10,11 +10,12 @@ func Execute(cfg *config.Config) error {
 		for _, t := range node.Targets {
 
 			s := server.Server{
-				Host: t,
+				Host:  t,
+				Admin: true,
 			}
-			//if err := s.ParseConfig(); err != nil {
-			//	return err
-			//}
+			if err := s.ParseConfig(); err != nil {
+				return err
+			}
 			if err := s.Transport(); err != nil {
 				return err
 			}

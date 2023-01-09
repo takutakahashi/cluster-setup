@@ -15,6 +15,10 @@ type Server struct {
 
 func (s Server) Transport() error {
 	logrus.Infof("transport files to %s", s.Host)
+	if out, err := s.Execute([]string{"rm", "-rf", "cluster-setup"}, true); err != nil {
+		logrus.Error(out)
+		return err
+	}
 	c := exec.Command(
 		"scp",
 		"-r",
@@ -32,34 +36,32 @@ func (s Server) ExecuteMitamae() error {
 	if err := s.setupMitamae(); err != nil {
 		return err
 	}
-	return fmt.Errorf("not implemented")
+	return nil
 }
 
 func (s Server) ParseConfig() error {
-	return fmt.Errorf("not implemented")
+	// TODO: this is mock
+	if err := exec.Command("rm", "-rf", "dist").Run(); err != nil {
+		return nil
+	}
+	return exec.Command("cp", "-rf", "assets", "dist").Run()
 }
 
 func (s Server) setupMitamae() error {
-	_, err := s.Execute("/usr/local/bin/install_mitamae.sh", true)
+	out, err := s.Execute([]string{"bash", "cluster-setup/bin/install_mitamae.sh"}, true)
+	logrus.Infof("out: %s", out)
 	return err
 }
 
-func (s Server) Execute(execPath string, sudo bool) ([]byte, error) {
+func (s Server) Execute(params []string, sudo bool) ([]byte, error) {
 	if sudo && !s.Admin {
 		return nil, fmt.Errorf("can't exec as sudo")
 	}
-	var c *exec.Cmd
+	in := []string{}
+	in = append(in, s.Host)
 	if sudo {
-		c = exec.Command(
-			"ssh",
-			s.Host,
-			"sudo",
-			execPath)
-	} else {
-		c = exec.Command(
-			"ssh",
-			s.Host,
-			execPath)
+		in = append(in, "sudo")
 	}
-	return c.Output()
+	in = append(in, params...)
+	return exec.Command("ssh", in...).Output()
 }
