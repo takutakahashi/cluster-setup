@@ -4,4 +4,10 @@ node-taint:
     - {{ . }}
 {{- end }}
 {{- end }}
+{{- if .Labels -}}
+node-label:
+{{- range .Labels }}
+    - {{ . }}
+{{- end }}
+{{- end }}
 {{ .Params | toYaml }}
