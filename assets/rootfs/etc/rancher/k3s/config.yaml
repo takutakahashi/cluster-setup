@@ -1,0 +1,10 @@
+node-taint:
+    - k3s-controlplane=true:NoExecute
+disable:
+    - local-storage
+no-deploy:
+    - traefik
+    - servicelb
+    - metrics-server
+tls-san:
+    - k8s-api.com

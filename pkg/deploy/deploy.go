@@ -12,6 +12,7 @@ func Execute(cfg *config.Config) error {
 			s := server.Server{
 				Host:  t,
 				Admin: true,
+				Node:  node,
 			}
 			if err := s.ParseConfig(); err != nil {
 				return err

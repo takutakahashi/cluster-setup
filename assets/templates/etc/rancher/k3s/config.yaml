@@ -1,0 +1,7 @@
+{{- if .Taints -}}
+node-taint:
+{{- range .Taints }}
+    - {{ . }}
+{{- end }}
+{{- end }}
+{{ .Params | toYaml }}
