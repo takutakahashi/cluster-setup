@@ -1,13 +1,23 @@
 package deploy
 
 import (
-	"fmt"
-
-	"github.com/sirupsen/logrus"
 	"github.com/takutakahashi/cluster-setup/pkg/config"
+	"github.com/takutakahashi/cluster-setup/pkg/server"
 )
 
 func Execute(cfg *config.Config) error {
-	logrus.Info(cfg)
-	return fmt.Errorf("not implemented")
+	for _, node := range cfg.Nodes {
+
+		server.ParseConfig(node)
+		for _, t := range node.Targets {
+			if err := server.Transport(t); err != nil {
+				return err
+			}
+			if err := server.ExecuteMitamae(t); err != nil {
+				return err
+			}
+		}
+
+	}
+	return nil
 }
