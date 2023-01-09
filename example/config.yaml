@@ -16,3 +16,7 @@ nodes:
       - local-storage
     tls-san:
       - k8s-api.com
+secret:
+  url: "https://localhost:6443"
+  token: "tokenfromfile"
+  datastore: "mysql://mysqlfromfile"

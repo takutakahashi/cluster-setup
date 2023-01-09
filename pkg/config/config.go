@@ -3,6 +3,7 @@ package config
 import (
 	"io/ioutil"
 
+	"github.com/caarlos0/env"
 	"gopkg.in/yaml.v3"
 )
 
@@ -22,9 +23,9 @@ type Node struct {
 }
 
 type Secret struct {
-	URL       string `yaml:"url"`
-	DataStore string `yaml:"datastore"`
-	Token     string `yaml:"token"`
+	URL       string `env:"K3S_URL,required"`
+	DataStore string `env:"K3S_DATASTORE,required"`
+	Token     string `env:"K3S_TOKEN,required"`
 }
 
 type NodeType string
@@ -43,5 +44,20 @@ func Load(path string) (*Config, error) {
 	if err := yaml.Unmarshal(buf, c); err != nil {
 		return nil, err
 	}
+	if c.Secret.URL == "" || c.Secret.DataStore == "" || c.Secret.Token == "" {
+		s, err := loadSecretFromEnv()
+		if err != nil {
+			return nil, err
+		}
+		c.Secret = s
+	}
 	return c, nil
+}
+
+func loadSecretFromEnv() (Secret, error) {
+	ret := Secret{}
+	if err := env.Parse(&ret); err != nil {
+		return ret, err
+	}
+	return ret, nil
 }
