@@ -1,4 +1,0 @@
-node-name: storage
-with-node-id: true
-node-taint:
-  - node-role=storage:NoSchedule
