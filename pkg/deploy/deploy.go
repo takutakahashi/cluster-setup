@@ -10,10 +10,11 @@ func Execute(cfg *config.Config) error {
 		for _, t := range node.Targets {
 
 			s := server.Server{
-				Host:   t,
-				Admin:  true,
-				Node:   node,
-				Secret: cfg.Secret,
+				Version: cfg.Version,
+				Host:    t,
+				Admin:   true,
+				Node:    node,
+				Secret:  cfg.Secret,
 			}
 			if err := s.ParseConfig(); err != nil {
 				return err

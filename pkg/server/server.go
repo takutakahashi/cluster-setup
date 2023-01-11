@@ -14,10 +14,11 @@ import (
 )
 
 type Server struct {
-	Node   config.Node
-	Host   string
-	Admin  bool
-	Secret config.Secret
+	Version string
+	Node    config.Node
+	Host    string
+	Admin   bool
+	Secret  config.Secret
 }
 
 func (s Server) Transport() error {
@@ -65,6 +66,18 @@ func (s Server) ParseConfig() error {
 		"toYaml": toYAML,
 	}
 	tpl, err := template.New("config.yaml").Funcs(fm).ParseFiles("assets/templates/etc/rancher/k3s/config.yaml")
+	if err != nil {
+		return err
+	}
+	if err := tpl.Execute(w, s); err != nil {
+		return err
+	}
+	w.Close()
+	w, err = os.Create("assets/bin/install_k3s.sh")
+	if err != nil {
+		return err
+	}
+	tpl, err = template.ParseFiles("assets/templates/bin/install_k3s.sh")
 	if err != nil {
 		return err
 	}
