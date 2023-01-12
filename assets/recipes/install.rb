@@ -1,3 +1,3 @@
 execute "install script" do
-    command "bash ../bin/install_k3s.sh"
+    command "bash cluster-setup/bin/install_k3s.sh"
 end

@@ -44,7 +44,7 @@ func (s Server) ExecuteMitamae() error {
 	if err := s.setupMitamae(); err != nil {
 		return err
 	}
-	if out, err := s.Execute([]string{"mitamae", "local", "cluster-setup/default.rb", "--dry-run"}, true); err != nil {
+	if out, err := s.Execute([]string{"mitamae", "local", "cluster-setup/default.rb"}, true); err != nil {
 		logrus.Errorf("%s", out)
 		return err
 	} else {
@@ -58,7 +58,10 @@ func (s Server) ParseConfig() error {
 	if err := exec.Command("rm", "-rf", "dist").Run(); err != nil {
 		return err
 	}
-	w, err := os.Create("assets/rootfs/etc/rancher/k3s/config.yaml")
+	if err := exec.Command("cp", "-rf", "assets", "dist").Run(); err != nil {
+		return err
+	}
+	w, err := os.Create("dist/rootfs/etc/rancher/k3s/config.yaml")
 	if err != nil {
 		return err
 	}
@@ -73,7 +76,7 @@ func (s Server) ParseConfig() error {
 		return err
 	}
 	w.Close()
-	w, err = os.Create("assets/bin/install_k3s.sh")
+	w, err = os.Create("dist/bin/install_k3s.sh")
 	if err != nil {
 		return err
 	}
@@ -82,9 +85,6 @@ func (s Server) ParseConfig() error {
 		return err
 	}
 	if err := tpl.Execute(w, s); err != nil {
-		return err
-	}
-	if err := exec.Command("cp", "-rf", "assets", "dist").Run(); err != nil {
 		return err
 	}
 	return nil

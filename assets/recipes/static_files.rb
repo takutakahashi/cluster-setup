@@ -12,6 +12,6 @@ end
   end
 end
 
-execute "reboot if needed" do
-  command "ulimit -n |grep 65535 || reboot"
-end
+#execute "reboot if needed" do
+#  command "ulimit -n |grep 65535 || reboot"
+#end
