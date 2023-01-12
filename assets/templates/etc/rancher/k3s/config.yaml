@@ -5,8 +5,6 @@ datastore-endpoint: {{ .Secret.DataStore }}
 server: {{ .Secret.URL }}
 {{- end }}
 token: {{ .Secret.Token }}
-node-name: {{ .Node.Type }}
-with-node-id: true
 {{ if .Node.Taints -}}
 node-taint:
 {{- range .Node.Taints }}
