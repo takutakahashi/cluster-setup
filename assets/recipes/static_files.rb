@@ -4,6 +4,7 @@ end
 
 %w(
     /etc/security/limits.conf
+    /etc/sysctl.d/99-inotify.conf
     /etc/rancher/k3s/config.yaml
 ).each do |path|
   template path do
@@ -12,14 +13,3 @@ end
   end
 end
 
-execute "sudo sysctl fs.inotify.max_user_instances=1024" do
-  command "sudo sysctl fs.inotify.max_user_instances=1024"
-end
-
-execute "sudo sysctl fs.inotify.max_user_watches=524288" do
-  command "sudo sysctl fs.inotify.max_user_watches=524288"
-end
-
-#execute "reboot if needed" do
-#  command "ulimit -n |grep 65535 || reboot"
-#end
