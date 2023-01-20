@@ -3,5 +3,5 @@ execute "install script" do
 end
 
 execute "reboot if needed" do
-  command "sysctl -A |grep fs.inotify.max_user_watches |grep 524288 || reboot"
+  command "sysctl -A |grep fs.inotify.max_user_instances |grep 1024 || reboot"
 end
