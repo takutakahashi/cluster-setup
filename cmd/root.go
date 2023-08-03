@@ -29,11 +29,15 @@ to quickly create a Cobra application.`,
 		if err != nil {
 			logrus.Fatal(err)
 		}
+		local, err := cmd.Flags().GetBool("output-local")
+		if err != nil {
+			logrus.Fatal(err)
+		}
 		cfg, err := config.Load(cp)
 		if err != nil {
 			logrus.Fatal(err)
 		}
-		if err := deploy.Execute(cfg); err != nil {
+		if err := deploy.Execute(cfg, local); err != nil {
 			logrus.Fatal(err)
 		}
 	},
@@ -58,4 +62,5 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().StringP("config", "c", "", "config path")
+	rootCmd.Flags().BoolP("output-local", "l", false, "output assets dist to local")
 }
