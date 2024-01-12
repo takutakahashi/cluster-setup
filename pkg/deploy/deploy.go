@@ -5,7 +5,7 @@ import (
 	"github.com/takutakahashi/cluster-setup/pkg/server"
 )
 
-func Execute(cfg *config.Config) error {
+func Execute(cfg *config.Config, local bool) error {
 	for _, node := range cfg.Nodes {
 		for _, t := range node.Targets {
 
@@ -19,11 +19,13 @@ func Execute(cfg *config.Config) error {
 			if err := s.ParseConfig(); err != nil {
 				return err
 			}
-			if err := s.Transport(); err != nil {
-				return err
-			}
-			if err := s.ExecuteMitamae(); err != nil {
-				return err
+			if !local {
+				if err := s.Transport(); err != nil {
+					return err
+				}
+				if err := s.ExecuteMitamae(); err != nil {
+					return err
+				}
 			}
 		}
 
