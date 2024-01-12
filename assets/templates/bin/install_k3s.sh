@@ -8,8 +8,9 @@ fi
  curl -sfL https://get.k3s.io | K3S_TOKEN={{ .Secret.Token }} \
    K3S_URL={{ .Secret.URL }} \
    INSTALL_K3S_VERSION={{ .Version }} \
+{{- if eq .Node.Type "server" }}
    INSTALL_K3S_EXEC={{ .Node.Type }} \
-{{ if eq .Node.Type "server" -}}
-   K3S_DATASTORE_ENDPOINT={{ .Secret.DataStore }} \
-{{- end -}} 
-   sh - 
+   K3S_DATASTORE_ENDPOINT="{{ .Secret.DataStore }}" sh - 
+{{- else }}
+   INSTALL_K3S_EXEC={{ .Node.Type }} sh -
+{{- end }} 
