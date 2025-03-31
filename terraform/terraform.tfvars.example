@@ -1,13 +1,30 @@
-# Proxmox Provider Configuration
-proxmox_api_url = "https://proxmox.example.com:8006/api2/json"
+# Proxmox Provider Configuration - Default values
+proxmox_api_url = "https://proxmox-default.example.com:8006/api2/json"
 proxmox_user = "terraform@pve"
-proxmox_password = "your-password-here"
+proxmox_password = "your-default-password-here"
 proxmox_tls_insecure = true
 proxmox_debug = false
 proxmox_log_enable = false
 
-# Proxmox Nodes
-proxmox_nodes = ["node-1", "node-2", "node-3"]
+# Node-specific Proxmox configuration
+proxmox_nodes_config = {
+  "node-1" = {
+    api_url      = "https://proxmox-node1.example.com:8006/api2/json"
+    user         = "terraform@pve"
+    password     = "node1-password"
+    tls_insecure = true
+  },
+  "node-2" = {
+    api_url      = "https://proxmox-node2.example.com:8006/api2/json"
+    user         = "terraform@pve"
+    password     = "node2-password"
+    tls_insecure = true
+  },
+  "node-3" = {
+    api_url      = "https://proxmox-node3.example.com:8006/api2/json"
+    # ユーザーやパスワードを省略すると、デフォルト値が使用されます
+  }
+}
 
 # VM Template
 template_name = "ubuntu-cloud-template"

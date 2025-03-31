@@ -27,6 +27,7 @@ resource "null_resource" "upload_cloud_init_files" {
   # Only execute when the content changes
   triggers = {
     cloud_init_content = local.has_custom_script ? var.custom_script : ""
+    node_name = lookup(each.value, "node", local.vm_node_distribution[each.key])
   }
 
   # For each node, upload the cloud-init file

@@ -1,19 +1,21 @@
-# Proxmox Provider Variables
+# Proxmox Provider Variables - Default configuration
 variable "proxmox_api_url" {
-  description = "The Proxmox API URL (e.g., https://proxmox-server:8006/api2/json)"
+  description = "The default Proxmox API URL (used if node-specific URL is not provided)"
   type        = string
+  default     = ""
 }
 
 variable "proxmox_user" {
-  description = "Proxmox user with appropriate permissions"
+  description = "Default Proxmox user with appropriate permissions (used if node-specific user is not provided)"
   type        = string
   default     = "root@pam"
 }
 
 variable "proxmox_password" {
-  description = "Password for Proxmox user"
+  description = "Default password for Proxmox user (used if node-specific password is not provided)"
   type        = string
   sensitive   = true
+  default     = null
 }
 
 variable "proxmox_tls_insecure" {
@@ -40,9 +42,21 @@ variable "proxmox_log_file" {
   default     = "terraform-plugin-proxmox.log"
 }
 
-# Hypervisor Nodes Configuration
+# Node-specific Proxmox Configuration
+variable "proxmox_nodes_config" {
+  description = "Configuration for Proxmox nodes with their API URLs and credentials"
+  type = map(object({
+    api_url      = string
+    user         = optional(string)
+    password     = optional(string)
+    tls_insecure = optional(bool)
+  }))
+  default = {}
+}
+
+# Backward compatibility - List of node names
 variable "proxmox_nodes" {
-  description = "List of Proxmox nodes"
+  description = "List of Proxmox nodes (for backward compatibility)"
   type        = list(string)
   default     = ["node-1", "node-2", "node-3"]
 }
