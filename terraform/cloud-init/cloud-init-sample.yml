@@ -1,0 +1,25 @@
+#cloud-config
+# Sample cloud-init configuration for Ubuntu VM
+
+# Set hostname
+hostname: ubuntu-vm
+
+# Update package lists and install essential packages
+package_update: true
+package_upgrade: true
+packages:
+  - qemu-guest-agent
+  - net-tools
+  - htop
+  - curl
+  - wget
+  - vim
+
+# Configure users and SSH keys
+# (replaced by Proxmox cloud-init implementation)
+
+# Run commands on first boot
+runcmd:
+  - systemctl enable qemu-guest-agent
+  - systemctl start qemu-guest-agent
+  - echo "Custom cloud-init configuration applied" > /var/log/cloud-init-custom.log
