@@ -1,0 +1,81 @@
+# Proxmox Provider Configuration - Default values
+proxmox_api_url = "https://proxmox-default.example.com:8006/api2/json"
+proxmox_user = "terraform@pve"
+proxmox_password = "your-default-password-here"
+proxmox_tls_insecure = true
+proxmox_debug = false
+proxmox_log_enable = false
+
+# Node-specific Proxmox configuration
+proxmox_nodes_config = {
+  "node-1" = {
+    api_url      = "https://proxmox-node1.example.com:8006/api2/json"
+    user         = "terraform@pve"
+    password     = "node1-password"
+    tls_insecure = true
+  },
+  "node-2" = {
+    api_url      = "https://proxmox-node2.example.com:8006/api2/json"
+    user         = "terraform@pve"
+    password     = "node2-password"
+    tls_insecure = true
+  },
+  "node-3" = {
+    api_url      = "https://proxmox-node3.example.com:8006/api2/json"
+    # ユーザーやパスワードを省略すると、デフォルト値が使用されます
+  }
+}
+
+# VM Template
+template_name = "ubuntu-cloud-template"
+template_storage = "local"
+
+# VM Configuration Examples
+vms = {
+  "ubuntu-vm-1" = {
+    node = "node-1"
+    cores = 2
+    memory = 2048
+    disk_size = "20G"
+    storage_pool = "local-lvm"
+    network_bridge = "vmbr0"
+    ip_address = "192.168.1.101/24"
+    gateway = "192.168.1.1"
+  },
+  "ubuntu-vm-2" = {
+    node = "node-2"
+    cores = 2
+    memory = 2048
+    disk_size = "20G"
+    storage_pool = "local-lvm"
+    network_bridge = "vmbr0"
+    ip_address = "192.168.1.102/24"
+    gateway = "192.168.1.1"
+  },
+  "ubuntu-vm-3" = {
+    node = "node-3"
+    cores = 2
+    memory = 2048
+    disk_size = "20G"
+    storage_pool = "local-lvm"
+    network_bridge = "vmbr0"
+    ip_address = "192.168.1.103/24"
+    gateway = "192.168.1.1"
+  }
+}
+
+# SSH Keys for VM Access
+ssh_public_keys = [
+  "ssh-rsa AAAAB3NzaC1yc2E... your-ssh-public-key-here",
+]
+
+# Cloud-Init User
+cloud_init_user = "ubuntu"
+
+# Custom Script to Run on VM Boot
+custom_script = <<-EOT
+#!/bin/bash
+echo "Running custom script on $(hostname)"
+apt-get update
+apt-get install -y htop net-tools
+EOT
