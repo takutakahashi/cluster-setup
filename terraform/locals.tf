@@ -11,4 +11,15 @@ locals {
   
   # Determine if a custom script is provided
   has_custom_script = var.custom_script != ""
+  
+  # Get all node names from proxmox_nodes_config or fallback to proxmox_nodes
+  all_node_names = length(keys(var.proxmox_nodes_config)) > 0 ? keys(var.proxmox_nodes_config) : var.proxmox_nodes
+
+  # Group VMs by node name
+  vms_by_node = {
+    for node in local.all_node_names : node => {
+      for vm_name, vm in var.vms : vm_name => vm
+      if lookup(vm, "node", local.vm_node_distribution[vm_name]) == node
+    }
+  }
 }
