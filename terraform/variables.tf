@@ -5,6 +5,19 @@ variable "proxmox_api_url" {
   default     = ""
 }
 
+variable "proxmox_api_token_id" {
+  description = "Default Proxmox API token ID (used if node-specific token is not provided)"
+  type        = string
+  default     = ""
+}
+
+variable "proxmox_api_token_secret" {
+  description = "Default Proxmox API token secret (used if node-specific token is not provided)"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 variable "proxmox_user" {
   description = "Default Proxmox user with appropriate permissions (used if node-specific user is not provided)"
   type        = string
@@ -47,8 +60,8 @@ variable "proxmox_nodes_config" {
   description = "Configuration for Proxmox nodes with their API URLs and credentials"
   type = map(object({
     api_url      = string
-    user         = optional(string)
-    password     = optional(string)
+    api_token_id = optional(string)
+    api_token_secret = optional(string)
     tls_insecure = optional(bool)
   }))
   default = {}
