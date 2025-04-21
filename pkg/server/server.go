@@ -24,7 +24,6 @@ type Server struct {
 func (s Server) Transport() error {
 	logrus.Infof("transport files to %s", s.Host)
 	if out, err := s.Execute([]string{"rm", "-rf", "cluster-setup"}, true); err != nil {
-		logrus.Error("failed to remove cluster-setup")
 		logrus.Error(out)
 		return err
 	}
@@ -36,7 +35,6 @@ func (s Server) Transport() error {
 	)
 	out, err := c.CombinedOutput()
 	if err != nil {
-		logrus.Error("failed to scp")
 		return errors.Wrapf(err, "output: %s", out)
 	}
 	return nil
